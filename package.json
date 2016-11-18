@@ -1,0 +1,29 @@
+{ "name": "phutility-160816-pmb",
+  "version": "0.0.1",
+  "description": "assorted php snippets, including nodejs adapter stuff",
+  "keywords": [ "php", "apache" ],
+
+  "author": "M.K. (https://github.com/mk-pmb)",
+  "homepage": "https://github.com/mk-pmb/phutility-160816-pmb#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mk-pmb/phutility-160816-pmb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mk-pmb/phutility-160816-pmb/issues"
+  },
+
+  "private": true, "license": "ISC",
+
+  "main": "compat/commonjs_nope.js",
+  "scripts": {
+    "test": "demo-util-160404-test-demos"
+  },
+
+  "dependencies": {},
+  "devDependencies": { "lib-demo-util-160404": "^0.1.0" },
+  "engines": { "php": "5.x" },
+
+
+  "npm vs. BOM = Unexpected token": "-*- coding: UTF-8 -*-"
+}

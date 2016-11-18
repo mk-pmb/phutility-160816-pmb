@@ -33,8 +33,8 @@ mishaps though:
 Daemonizers
 -----------
   * [daemonize][daemonize-web] ([Github repo][daemonize-github])
-  * [pm2 (Process Manager 2)][pm2-npm]
-    (`pm2 start my-worker.php --interpreter php5`)
+  * [pm2 (Process Manager 2)][pm2-npm],
+    `pm2 start my-worker.php --interpreter php5`
   * (to be continued)
 
 

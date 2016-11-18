@@ -1,7 +1,7 @@
 <?php # -*- coding: utf-8, tab-width: 2 -*-
 
 namespace phutility160816pmb;
-require_once(dirname(__FILE__) . '/../injector.php');
+require_once(__DIR__ . '/../injector.php');
 loadlib('compat/opsys');
 
 namespace phutility160816pmb\daemons\daemonized_worker;

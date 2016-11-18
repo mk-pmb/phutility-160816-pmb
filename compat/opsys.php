@@ -27,6 +27,12 @@ function guessUserHomeDir() {
 }
 
 
+function whoami () {
+  $whoami = posix_getpwuid(posix_geteuid());
+  return array($whoami['name'], $whoami['uid'], $whoami['gid']);
+}
+
+
 
 
 
