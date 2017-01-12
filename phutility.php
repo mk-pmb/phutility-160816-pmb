@@ -40,26 +40,29 @@ function ld($module, $feature = NULL, $invoke = NULL) {
   $result =& $module;
 
   if ($feature !== NULL) {
+    $dive = function ($step) use (&$result, $mod_name, $feature) {
+      static $path = NULL;
+      if (!is_array($result)) {
+        throw new \Exception('cannot retrieve key ' . quot($step)
+          . ': intermediate result is not an array at '
+          . ($path === NULL ? 'top-level' : 'path ' . quot($path))
+          . ' of module ' . $mod_name);
+      }
+      if (!array_key_exists($step, $result)) {
+        throw new \Exception('cannot find key ' . quot($step)
+          . ' in intermediate result at '
+          . ($path === NULL ? 'top-level' : 'path ' . quot($path))
+          . ' of module ' . $mod_name);
+      }
+      $result = $result[$step];
+      $path = ($path === NULL ? $step : $path . '/' . $step);
+    };
     if (is_string($feature)) { $feature = explode('/', $feature); }
-    call_user_func(function () use (&$result, $mod_name, $feature) {
-      $path = NULL;
-      foreach ($feature as $step) {
-        if (!is_array($result)) {
-          throw new \Exception('cannot retrieve key ' . quot($step)
-            . ': intermediate result is not an array at '
-            . ($path === NULL ? 'top-level' : 'path ' . quot($path))
-            . ' of module ' . $mod_name);
-        }
-        if (!array_key_exists($step, $result)) {
-          throw new \Exception('cannot find key ' . quot($step)
-            . ' in intermediate result at '
-            . ($path === NULL ? 'top-level' : 'path ' . quot($path))
-            . ' of module ' . $mod_name);
-        }
-        $result = $result[$step];
-        $path = ($path === NULL ? $step : $path . '/' . $step);
-      };
-    });
+    if (is_array($feature)) {
+      array_map($dive, $feature);
+    } else {
+      $dive($feature);
+    }
   }
 
   if ($invoke !== NULL) {

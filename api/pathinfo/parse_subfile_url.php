@@ -5,9 +5,6 @@ require_once(__DIR__ . '/../../phutility.php');
 
 
 reg(__FILE__, function () {
-  static $parse_subfile_url = NULL;
-  if ($parse_subfile_url !== NULL) { return $parse_subfile_url; }
-
   $rx_fn = "[a-z0-9_\\-]+";
   $rx_fxt = "[a-z0-9]{2,5}";
   $rx_pi = '/'
