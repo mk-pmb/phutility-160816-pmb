@@ -74,8 +74,10 @@ return function ($cfg) {
             : 'feature ' . $quot(implode('/', $feature)) . ' of ')
           . 'module ' . $mod_name . ' is not callable');
       }
-      $result = ($invoke === true ? call_user_func($result)
-        : call_user_func_array($result, $invoke));
+      if ((!is_array($invoke)) || (func_num_args() > 3)) {
+        $invoke = array_slice(func_get_args(), 2);
+      }
+      $result = call_user_func_array($result, $invoke);
     }
 
     return $result;
