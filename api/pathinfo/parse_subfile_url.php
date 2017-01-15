@@ -7,9 +7,8 @@ require_once(__DIR__ . '/../../phutility.php');
 reg(__FILE__, function () {
   $rx_fn = "[a-z0-9_\\-]+";
   $rx_fxt = "[a-z0-9]{2,5}";
-  $rx_pi = '/'
-      . "(dir=(?:$rx_fn/)*)"
-      . "(fn=(bfn=$rx_fn)\\.(fext=$rx_fxt))"
+  $rx_pi = "(dir=(?:/$rx_fn)*)(?:/|$)"
+      . "(fn=$|(bfn=$rx_fn)\\.(fext=$rx_fxt))"
       . "(?:\$|/(func=$rx_fn(?:\\.$rx_fxt)*))"
       . "(args=(?:/$rx_fn(?:\\.$rx_fxt)*)*/?)";
 
@@ -26,6 +25,7 @@ reg(__FILE__, function () {
       $pi = array_map(function ($slot_num) use ($match) {
         return (string)@$match[$slot_num];
       }, $slot_map);
+      $pi['dir'] = ltrim($pi['dir'], '/');
       return $pi;
     }
     return NULL;
