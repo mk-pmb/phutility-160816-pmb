@@ -5,27 +5,25 @@ require_once(__DIR__ . '/../../phutility.php');
 
 
 reg(__FILE__, function () {
-  $rx_fn = "[a-z0-9_\\-]+";
-  $rx_fxt = "[a-z0-9]{2,5}";
-  $rx_pi = "(dir=(?:/$rx_fn)*)(?:/|$)"
-      . "(fn=$|(bfn=$rx_fn)\\.(fext=$rx_fxt))"
-      . "(?:\$|/(func=$rx_fn(?:\\.$rx_fxt)*))"
-      . "(args=(?:/$rx_fn(?:\\.$rx_fxt)*)*/?)";
+  $rgxtmpl = ld('data/text/rgx/pardeg');
+  $rx_pi = $rgxtmpl([ '!^',
+    [ '°dir=(?:/æ)*(?:/|$)' ],
+    [ '°fn=$|', [ '°bfn=æ' ], '\.', [ '°fext=µ' ] ],
+    [ '?:$|', '/', [ '°func=Æ' ] ],
+    [ '°args=(?:/Æ)*/?' ],
+    '$!'
+  ], [
+    'Æ' => 'æ(?:\.µ)*',
+    'æ' => '[A-Za-z0-9_\-]+',
+    'µ' => '[A-Za-z0-9]{2,5}',
+  ]);
 
-  $slot_map = array();
-  $add_slot = function ($m) use (&$slot_map) {
-    $slot_map[$m[1]] = count($slot_map) + 1;
-    return '(';
-  };
-  $rx_pi = preg_replace_callback("!\\((\\w+)=!", $add_slot, $rx_pi);
-
-  $parse_subfile_url = function ($pi = NULL) use (&$rx_pi, &$slot_map) {
+  $parse_subfile_url = function ($pi = NULL) use (&$rx_pi) {
     if ($pi === NULL) { $pi = (string)@$_SERVER['PATH_INFO']; }
-    if (preg_match("!^$rx_pi\$!", $pi, $match)) {
-      $pi = array_map(function ($slot_num) use ($match) {
-        return (string)@$match[$slot_num];
-      }, $slot_map);
+    if (preg_match($rx_pi(), $pi, $match)) {
+      $pi = $rx_pi($match);
       $pi['dir'] = ltrim($pi['dir'], '/');
+      $pi['relfn'] = $pi['dir'] . $pi['fn'];
       return $pi;
     }
     return NULL;

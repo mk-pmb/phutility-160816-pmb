@@ -5,16 +5,16 @@ use \phutility160816pmb as phut;
 
 phut\reg(__FILE__, function () {
 
-  $json = array();
+  $json = [];
 
-  $defopt = array(
+  $defopt = [
     'escape' => 'recommended',
     'finalWsp' => NULL,
     'indent' => 0,
     'indentMaxDepth' => PHP_INT_MAX,
     'parentContainerType' => NULL,
     'sortKeys' => false,
-    );
+    ];
   $defopt['esc_recommended'] = (0
     #| JSON_HEX_AMP
     #| JSON_HEX_APOS
@@ -39,7 +39,7 @@ phut\reg(__FILE__, function () {
   {
     $opts = $defuser;
     if (!is_array($defuser)) {
-      $opts = array();
+      $opts = [];
       if ($defuser !== NULL) { $opts['defuser'] = $defuser; }
     }
     $opts += $defopt;
@@ -99,9 +99,9 @@ phut\reg(__FILE__, function () {
       }
       $val = $data[$key];
       if (is_array($val)) {
-        $val = $stfy($val, array(
+        $val = $stfy($val, [
           'parentContainerType' => $json[0],
-          ) + $opts);
+          ] + $opts);
         $val = str_replace("\n", "\n$indent", $val);
       } else {
         $val = json_encode($val, $escape);
