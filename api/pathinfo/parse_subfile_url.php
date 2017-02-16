@@ -22,7 +22,8 @@ reg(__FILE__, function () {
     if ($pi === NULL) { $pi = (string)@$_SERVER['PATH_INFO']; }
     if (preg_match($rx_pi(), $pi, $match)) {
       $pi = $rx_pi($match);
-      $pi['dir'] = ltrim($pi['dir'], '/');
+      $dir = $pi['dir'] = ltrim($pi['dir'], '/');
+      $pi['dir_or_dot'] = ($dir === '' ? './' : $dir);
       $pi['relfn'] = $pi['dir'] . $pi['fn'];
       return $pi;
     }
