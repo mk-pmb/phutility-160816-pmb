@@ -1,0 +1,40 @@
+<?php # -*- coding: utf-8, tab-width: 2 -*-
+
+use phutility160816pmb as phut;
+require_once(__DIR__ . '/../../phutility.php');
+
+phut\reg(__FILE__, function () {
+
+  return function (&$cfg, &$rq, &$fatal) {
+    $destfn = (string)@$rq['fspath'];
+    $clen = phut\ld('web/http/errdoc/simple', 'clen', true);
+    $srcfh = @fopen('php://input', 'rb');
+    if (!$srcfh) { $fatal(500, 'Cannot read request body'); }
+
+    $existed = @file_exists($destfn);
+    $destfh = @fopen($destfn, 'w');
+    if (!$destfh) {
+      $hint = (string)@$why_not_writeable($destfn);
+      $hint = 'Cannot open target file' . ($hint ? ": $hint" : '') . '.';
+      $fatal(403, $hint);
+    }
+    $report = phut\ld('filesys/copy_fh2fh', NULL, [ $srcfh, $destfh,
+      [ 'maxbytes' => $clen,
+        'blksz' => @$cfg['file_io_blocksize'],
+      ] ]);
+    @fclose($srcfh);
+    @fflush($destfh);
+    @fclose($destfh);
+    $copy_err = $report['error'];
+    $written = $report['written'];
+    $report = "\nBytes expected: $clen"
+      . "\nBytes read: " . $report['read']
+      . "\nBytes written: $written";
+    if ($copy_err !== false) {
+      $fatal(500, 'File system write error: ' . $copy_err . $report);
+    }
+    if ($written === $clen) { $fatal(($existed ? 204 : 201), $byte_stats); }
+    $fatal(500, 'Byte counts do not match.' . $report);
+  };
+
+});

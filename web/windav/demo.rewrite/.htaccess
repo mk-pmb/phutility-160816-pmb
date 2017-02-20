@@ -1,0 +1,47 @@
+# -*- coding: utf-8, tab-width: 2 -*-
+
+# Assumptions: same as in ../demo.errdoc/.htaccess
+
+Options +Indexes
+
+
+AuthType Basic
+AuthName "WinDAV demo"
+AuthUserFile /var/www/your-webspace/windav/.htpasswd
+<IfModule mod_authz_groupfile.c>
+  AuthGroupFile /dev/null
+</IfModule>
+
+# Limit which methods we accept at all.
+<LimitExcept GET OPTIONS PROPFIND PUT DELETE COPY MOVE>
+  Require all denied
+</LimitExcept>
+
+# Limit write access to authenticated users.
+<LimitExcept HEAD GET OPTIONS PROPFIND>
+  Require valid-user
+</LimitExcept>
+
+# Make GET download the raw file contents to avoid problems with re-upload.
+# * Also void accidential execution of scripts when DAV clients just scan.
+SetHandler none
+php_flag engine off
+<FilesMatch "\.php[0-9]*$">
+  ForceType "text/plain; charset=UTF-8"
+</FilesMatch>
+
+# Wire our method handlers:
+
+<If "'%{REQUEST_METHOD}' == 'OPTIONS'">
+  Header set DAV "1"
+  Header add DAV "<http://apache.org/dav/propset/fs/1>"
+</If>
+
+<If "%{REQUEST_METHOD} in { 'PROPFIND', 'DELETE', 'PUT' }">
+  RewriteEngine on
+  RewriteRule ^ "/your-webspace/windav/rewrite-handler.php" [nosubreq,last]
+</If>
+
+# Use shorter error messages for shorter logs when testing.
+ErrorDocument 401 "Login failed."
+ErrorDocument 404 "File not found."

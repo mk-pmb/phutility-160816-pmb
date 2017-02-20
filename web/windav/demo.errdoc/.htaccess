@@ -1,0 +1,52 @@
+# -*- coding: utf-8, tab-width: 2 -*-
+
+# Assumptions:
+#   * Apache 2.4+ or the <If> blocks won't work.
+#   * /var/www/your-webspace is your webspace directory on the server
+#     * it is served at http://localhost/your-webspace/
+#   * /var/www/your-webspace/windav is a symlink to /…/phutility…/windav,
+#     or has the demo directories and hnd.default.php in it, the latter
+#     with correct phutility path.
+
+Options +Indexes
+
+# Limit which methods we accept at all: The WebDAV read access verbs.
+# Allowing write access methods would be futile since the ErrorDocument
+# approach doesn't forward the request body. For write acces, you'll need
+# to use the mod_rewrite approach demonstrated in ../demo.rewrite/.
+<LimitExcept HEAD GET OPTIONS PROPFIND>
+  Order Allow,Deny
+  Deny from all
+</LimitExcept>
+
+# Make default GET (as DAV clients would request it) download the
+# raw file contents to avoid problems with re-upload.
+# * Also void accidential execution of scripts when DAV clients just scan.
+# * Use a secret token to show which GET is the subrequest for our custom
+#   ErrorDocument, because I couldn't get %{IS_SUBREQ} to work.
+# * Important for ./demo/.htaccess: Keep script magic enabled for all
+#   HTTP methods that we want to handle via mod_rewrite.
+# * Combine all conditions b/c nested <If> blocks seem to be ignored.
+<If "( %{REQUEST_METHOD} in { 'GET', 'OPTIONS' } ) && ( '%{QUERY_STRING}' != 'download=no&get=output' )">
+  SetHandler none
+  php_flag engine off
+  <FilesMatch "\.php[0-9]*$">
+    # Unfortunately, FilesMatch inside If seems to be ignored as well,
+    # so we'll have to check that in another If block later.
+  </FilesMatch>
+</If>
+
+<If "( %{REQUEST_METHOD} in { 'GET', 'OPTIONS' } ) && ( '%{REQUEST_FILENAME}' =~ /\.php[0-9]*$/ )">
+  ForceType "text/plain; charset=UTF-8"
+</If>
+
+# Wire our method handlers:
+
+<If "'%{REQUEST_METHOD}' == 'OPTIONS'">
+  Header set DAV "1"
+  Header add DAV "<http://apache.org/dav/propset/fs/1>"
+</If>
+
+<If "'%{REQUEST_METHOD}' == 'PROPFIND'">
+  ErrorDocument 405 /your-webspace/windav/demo.errdoc/subdir/errdoc-handler.php?download=no&get=output
+</If>

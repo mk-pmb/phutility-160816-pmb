@@ -1,7 +1,7 @@
 <?php # -*- coding: utf-8, tab-width: 2 -*-
 
 use phutility160816pmb as phut;
-require_once(__DIR__ . '/../../phutility.php');
+require_once(__DIR__ . '/../../../phutility.php');
 
 phut\reg(__FILE__, function () {
 
@@ -32,7 +32,11 @@ phut\reg(__FILE__, function () {
     if ($sub[0] !== '') { $fail('Request path not within context'); }
     $sub = (string)@$sub[1];
     $rq['subpath'] = $sub;
-    $rq['fsbase'] = $sv([ 'CONTEXT_DOCUMENT_ROOT' ]);
+    $basepath = $sv([ 'CONTEXT_DOCUMENT_ROOT' ]);
+    $rq['fsbase'] = $basepath;
+    if (substr($basepath, 0, 1) !== '/') {
+      $fail('Cannot resolve target file name.');
+    }
     $rq['fspath'] = $rq['fsbase'] . $sub;
 
     $rq['clen'] = (int)@$_SERVER['CONTENT_LENGTH'];
