@@ -10,6 +10,11 @@
 
 Options +Indexes
 
+<IfModule mod_headers.c>
+  Header set Expires "Mon, 01 Jan 1990 00:00:00 UTC"
+  Header merge Cache-Control "public"
+</IfModule>
+
 # Limit which methods we accept at all: The WebDAV read access verbs.
 # Allowing write access methods would be futile since the ErrorDocument
 # approach doesn't forward the request body. For write acces, you'll need

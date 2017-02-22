@@ -64,12 +64,14 @@ function req_test () {
 
 function req_logsave () {
   export LANG=C
-  tee "$LOG_FN" | sed -rune '
-    s~ HTTP/[0-9.]+$~ -> ~p
+  tee "$LOG_FN" | sed -runf <(echo '
+    \~ HTTP/[0-9.]+$~{
+      s~^(\S+)\s+~\1\t~
+      s~^(\S+\s+)/__demo_baseurl__~\1…~
+      s!\s+\S+$!\t-> !p
+    }
     s~^HTTP/[0-9.]+ ~~p
-    ' | sed -ure '
-    / $/{N;s~ \n~ ~}
-    '
+    ') | sed -ure '/ $/{N;s~ \n~ ~}'
 }
 
 

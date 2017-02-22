@@ -11,6 +11,12 @@ phut\reg(__FILE__, function () {
     if (!is_array($cfg)) { $fatal(500, 'Config must be an array'); }
 
     $rq = phut\ld('web/http/errdoc/parse_request', NULL, true);
+    if (is_string(@$rq['fspath'])) {
+      if (substr($rq['fspath'], -1) === '/') {
+        $rq['fspath'] = rtrim($rq['fspath'], '/');
+      }
+    }
+
     switch (@$cfg['mechanism']) {
     case 'errdoc405':
       if ($rq['status'] !== 405) { $fatal(500, 'Unexpected invocation'); }
@@ -24,6 +30,7 @@ phut\reg(__FILE__, function () {
     $mtd = strtolower($rq['method']);
     switch ($mtd) {
     case 'delete':
+    case 'mkcol':
     case 'options':
     case 'propfind':
     case 'put':

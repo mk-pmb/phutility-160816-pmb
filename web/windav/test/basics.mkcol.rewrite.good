@@ -1,0 +1,304 @@
+﻿==---==---==---==
+HEAD /__demo_baseurl__/subdir/foo HTTP/1.1
+
+{{connect}}
+HTTP/1.1 404 Not Found
+Date: {{date/time}} GMT
+Content-Type: text/html; charset={{...}}
+
+
+==---==---==---==
+MKCOL /__demo_baseurl__/subdir/foo/bar HTTP/1.1
+
+{{connect}}
+HTTP/1.1 401 Unauthorized
+Date: {{date/time}} GMT
+WWW-Authenticate: Basic realm="WinDAV demo"
+Content-Length: 13
+Content-Type: text/html; charset={{...}}
+
+Login failed.
+==---==---==---==
+MKCOL /__demo_baseurl__/subdir/foo/bar HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 409 Conflict
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>409 Conflict</title>
+</head><body>
+  <h1>Conflict</h1>
+  <p>Parent collection does not exist.</p>
+</body></html>
+
+==---==---==---==
+MKCOL /__demo_baseurl__/subdir/foo HTTP/1.1
+Authorization: Basic {{...}}
+Content-Length: 7
+
+hello
+
+{{connect}}
+HTTP/1.1 415 Unsupported Media Type
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>415 Unsupported Media Type</title>
+</head><body>
+  <h1>Unsupported Media Type</h1>
+  <p>Initial collection content is not supported yet.</p>
+</body></html>
+
+==---==---==---==
+MKCOL /__demo_baseurl__/subdir/foo HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 201 Created
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>201 Created</title>
+</head><body>
+  <h1>Created</h1>
+</body></html>
+
+==---==---==---==
+MKCOL /__demo_baseurl__/subdir/foo/bar HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 201 Created
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>201 Created</title>
+</head><body>
+  <h1>Created</h1>
+</body></html>
+
+==---==---==---==
+MKCOL /__demo_baseurl__/subdir/foo/bar HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 301 Moved Permanently
+Date: {{date/time}} GMT
+Location: http://localhost/__demo_baseurl__/subdir/foo/bar/
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>301 Moved Permanently</title>
+</head><body>
+<h1>Moved Permanently</h1>
+<p>The document has moved <a href="http://localhost/__demo_baseurl__/subdir/foo/bar/">here</a>.</p>
+<hr>
+<address>Apache/2.4.10 (Ubuntu) Server at localhost Port 80</address>
+</body></html>
+
+==---==---==---==
+MKCOL /__demo_baseurl__/subdir/foo/bar/ HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 405 Method Not Allowed
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>405 Method Not Allowed</title>
+</head><body>
+  <h1>Method Not Allowed</h1>
+  <p>Target already exists.</p>
+</body></html>
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/foo HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 301 Moved Permanently
+Date: {{date/time}} GMT
+Location: http://localhost/__demo_baseurl__/subdir/foo/
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>301 Moved Permanently</title>
+</head><body>
+<h1>Moved Permanently</h1>
+<p>The document has moved <a href="http://localhost/__demo_baseurl__/subdir/foo/">here</a>.</p>
+<hr>
+<address>Apache/2.4.10 (Ubuntu) Server at localhost Port 80</address>
+</body></html>
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/foo/ HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 403 Forbidden
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>403 Forbidden</title>
+</head><body>
+  <h1>Forbidden</h1>
+  <p>Failed to delete, probably not empty.</p>
+</body></html>
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/foo/bar HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 301 Moved Permanently
+Date: {{date/time}} GMT
+Location: http://localhost/__demo_baseurl__/subdir/foo/bar/
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>301 Moved Permanently</title>
+</head><body>
+<h1>Moved Permanently</h1>
+<p>The document has moved <a href="http://localhost/__demo_baseurl__/subdir/foo/bar/">here</a>.</p>
+<hr>
+<address>Apache/2.4.10 (Ubuntu) Server at localhost Port 80</address>
+</body></html>
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/foo/bar/ HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 204 No Content
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>204 No Content</title>
+</head><body>
+  <h1>No Content</h1>
+  <p>Empty directory was deleted.</p>
+</body></html>
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/foo/bar/ HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 404 Not Found
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>404 Not Found</title>
+</head><body>
+  <h1>Not Found</h1>
+  <p>No need to delete it.</p>
+</body></html>
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/foo HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 301 Moved Permanently
+Date: {{date/time}} GMT
+Location: http://localhost/__demo_baseurl__/subdir/foo/
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>301 Moved Permanently</title>
+</head><body>
+<h1>Moved Permanently</h1>
+<p>The document has moved <a href="http://localhost/__demo_baseurl__/subdir/foo/">here</a>.</p>
+<hr>
+<address>Apache/2.4.10 (Ubuntu) Server at localhost Port 80</address>
+</body></html>
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/foo/ HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 204 No Content
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>204 No Content</title>
+</head><body>
+  <h1>No Content</h1>
+  <p>Empty directory was deleted.</p>
+</body></html>
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/foo/ HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 404 Not Found
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>404 Not Found</title>
+</head><body>
+  <h1>Not Found</h1>
+  <p>No need to delete it.</p>
+</body></html>
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/foo HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 404 Not Found
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+<!DOCTYPE html><html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>404 Not Found</title>
+</head><body>
+  <h1>Not Found</h1>
+  <p>No need to delete it.</p>
+</body></html>
+
+==---==---==---==

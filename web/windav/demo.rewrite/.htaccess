@@ -4,6 +4,10 @@
 
 Options +Indexes
 
+<IfModule mod_headers.c>
+  Header set Expires "Mon, 01 Jan 1990 00:00:00 UTC"
+  Header merge Cache-Control "public"
+</IfModule>
 
 AuthType Basic
 AuthName "WinDAV demo"
@@ -13,7 +17,7 @@ AuthUserFile /var/www/your-webspace/windav/.htpasswd
 </IfModule>
 
 # Limit which methods we accept at all.
-<LimitExcept GET OPTIONS PROPFIND PUT DELETE COPY MOVE>
+<LimitExcept HEAD GET OPTIONS PROPFIND PUT DELETE COPY MOVE>
   Require all denied
 </LimitExcept>
 
@@ -37,7 +41,7 @@ php_flag engine off
   Header add DAV "<http://apache.org/dav/propset/fs/1>"
 </If>
 
-<If "%{REQUEST_METHOD} in { 'PROPFIND', 'DELETE', 'PUT' }">
+<If "%{REQUEST_METHOD} in { 'PROPFIND', 'PUT', 'MKCOL', 'DELETE' }">
   RewriteEngine on
   RewriteRule ^ "/your-webspace/windav/rewrite-handler.php" [nosubreq,last]
 </If>

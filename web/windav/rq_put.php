@@ -14,10 +14,17 @@ phut\reg(__FILE__, function () {
     $existed = @file_exists($destfn);
     $destfh = @fopen($destfn, 'w');
     if (!$destfh) {
-      $hint = (string)@$why_not_writeable($destfn);
+      if ($existed && @is_dir($destfn)) {
+        $fatal(405, 'Collection (directory) does not support PUT.');
+      }
+      $hint = (string)@$why_not_writeable($destfn, $existed);
       $hint = 'Cannot open target file' . ($hint ? ": $hint" : '') . '.';
       $fatal(403, $hint);
     }
+
+    $fmode = @$cfg['chmod_file'];
+    if (is_int($fmode) || is_string($fmode)) { @chmod($destfn, $fmode); }
+
     $report = phut\ld('filesys/copy_fh2fh', NULL, [ $srcfh, $destfh,
       [ 'maxbytes' => $clen,
         'blksz' => @$cfg['file_io_blocksize'],
