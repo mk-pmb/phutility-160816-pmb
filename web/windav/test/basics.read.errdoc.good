@@ -13,6 +13,17 @@ Content-Type: httpd/unix-directory
 
 ==---==---==---==
 PROPFIND /__demo_baseurl__/ HTTP/1.1
+
+{{connect}}
+HTTP/1.1 501 Not Implemented
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="501 Not Implemented"}} Cannot dive this deep. Maximum depth is 1.
+
+==---==---==---==
+PROPFIND /__demo_baseurl__/ HTTP/1.1
 Content-Length: 0
 Depth: 0
 
@@ -99,6 +110,32 @@ Content-Type: text/xml; charset={{...}}
     </propstat>
   </response>
 </multistatus>
+
+==---==---==---==
+PROPFIND /__demo_baseurl__/ HTTP/1.1
+Content-Length: 0
+Depth: 2
+
+{{connect}}
+HTTP/1.1 501 Not Implemented
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="501 Not Implemented"}} Cannot dive this deep. Maximum depth is 1.
+
+==---==---==---==
+PROPFIND /__demo_baseurl__/ HTTP/1.1
+Content-Length: 0
+Depth: Infinity
+
+{{connect}}
+HTTP/1.1 501 Not Implemented
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="501 Not Implemented"}} Cannot dive this deep. Maximum depth is 1.
 
 ==---==---==---==
 OPTIONS /__demo_baseurl__/raw-file-content-download.php HTTP/1.1

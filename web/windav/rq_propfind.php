@@ -16,9 +16,9 @@ phut\reg(__FILE__, function () {
       : $rfc4918_ch_9_1['default_depth']);
     $max_depth = strtolower((string)@$cfg['max_depth']);
     $max_depth = (substr($max_depth, 0, 3) === 'inf' ? INF : (int)$max_depth);
-    if ($max_depth < 1) { $max_depth = $rfc4918_ch_9_1['default_depth']; }
+    if ($max_depth < 1) { $max_depth = $rfc4918_ch_9_1['max_depth']; }
     if ($rq_depth > $max_depth) {
-      $fatal(501, 'Cannot dive this deep. Maximum depth is ' . $max_depth);
+      $fatal(501, "Cannot dive this deep. Maximum depth is $max_depth.");
     }
 
     $scandir = @$cfg['scandir'];

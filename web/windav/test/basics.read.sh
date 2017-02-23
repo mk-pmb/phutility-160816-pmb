@@ -20,8 +20,11 @@ function test_main () {
 
 function test_basic_reads () {
   req OPTIONS ''
+  req PROPFIND ''
   req pf:0 ''
   req pf:1 ''
+  req pf:2 ''
+  req pf:Infinity ''
   local RAW_FN='raw-file-content-download.php'
   req OPTIONS "$RAW_FN"
   req GET     "$RAW_FN"
