@@ -14,7 +14,7 @@ phut\reg(__FILE__, function () {
 
     $title = \phutility160816pmb\ld('web/http/statuscode2msg', $code);
     $ctype = 'text/html; charset=UTF-8';
-    $html = "<!DOCTYPE html><html><head>\n"
+    $html = "<!DOCTYPE html><html class=\"errdoc-simple\"><head>\n"
       . '  <meta http-equiv="Content-Type" content="' . $ctype . '">'
       . "\n  <title>$code $title</title>\n"
       . "</head><body>\n"

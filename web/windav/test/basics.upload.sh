@@ -8,10 +8,6 @@ function test_main () {
   cd "$SELFPATH" || return $?
   source req.sh --lib || return $?
 
-  local AUTH="$(./guess_login.sed ../.htpasswd)"
-  [ -n "$AUTH" ] || return 3$(echo 'E: failed to guess login' >&2)
-  AUTH="Authorization: Basic $(echo -n "$AUTH" | base64)"
-
   local DEMO_DIR= TESTNAME=
   for DEMO_DIR in ../demo.*/; do
     case "$DEMO_DIR" in
@@ -29,13 +25,13 @@ function test_put_del () {
   local UP_FN='subdir/upload.txt'
   req PUT "$UP_FN" L=0
 
-  req PUT "$UP_FN" "$AUTH" L=0
+  req PUT "$UP_FN" +auth L=0
   req GET "$UP_FN"
-  req PUT "$UP_FN" "$AUTH" L=30 '' "Hello, I'm a" 'request' 'body.'
+  req PUT "$UP_FN" +auth L=30 '' "Hello, I'm a" 'request' 'body.'
   req GET "$UP_FN"
 
   req DELETE "$UP_FN"
-  req DELETE "$UP_FN" "$AUTH"
+  req DELETE "$UP_FN" +auth
   req HEAD "$UP_FN"
 }
 

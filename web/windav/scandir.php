@@ -24,7 +24,13 @@ phut\reg(__FILE__, function () {
     natsort($sub);
     foreach ($sub as $fn) {
       if (substr($fn, 0, 1) === '.') { continue; }
-      $resp = $EX($fs_path . $fn, $depth, $url . urlencode($fn));
+      $resp = $EX($fs_path . $fn, $depth, $url . rawurlencode($fn));
+      # NB: Make sure to encode space as %20 (rawurlencode does this)
+      #     as opposed to '+' (which urlencode would): Windows 7 Pro
+      #     understand a plus sign literally, display it as '+'
+      #     (not space) and send it verbatim in PROPFIND, which Apache
+      #     will then unescape to space, and the PROPFIND will fail or
+      #     check the wrong resource.
       if ($resp !== false) { $found = array_merge($found, $resp); }
     }
 

@@ -8,10 +8,6 @@ function test_main () {
   cd "$SELFPATH" || return $?
   source req.sh --lib || return $?
 
-  local AUTH="$(./guess_login.sed ../.htpasswd)"
-  [ -n "$AUTH" ] || return 3$(echo 'E: failed to guess login' >&2)
-  AUTH="Authorization: Basic $(echo -n "$AUTH" | base64)"
-
   local DEMO_DIR= TESTNAME=
   for DEMO_DIR in ../demo.*/; do
     case "$DEMO_DIR" in
@@ -26,24 +22,24 @@ function test_main () {
 
 
 function test_mkcol () {
-  local FOO='subdir/foo'
-  req HEAD    $FOO
-  req MKCOL   $FOO/bar
-  req MKCOL   $FOO/bar    "$AUTH"
-  req MKCOL   $FOO        "$AUTH"   L=7 '' hello
-  req MKCOL   $FOO        "$AUTH"
-  req MKCOL   $FOO/bar    "$AUTH"
-  req MKCOL   $FOO/bar    "$AUTH"
-  req MKCOL   $FOO/bar/   "$AUTH"
-  req DELETE  $FOO        "$AUTH"
-  req DELETE  $FOO/       "$AUTH"
-  req DELETE  $FOO/bar    "$AUTH"
-  req DELETE  $FOO/bar/   "$AUTH"
-  req DELETE  $FOO/bar/   "$AUTH"
-  req DELETE  $FOO        "$AUTH"
-  req DELETE  $FOO/       "$AUTH"
-  req DELETE  $FOO/       "$AUTH"
-  req DELETE  $FOO        "$AUTH"
+  BASEURL+='subdir/'
+  req HEAD    foo
+  req MKCOL   foo/bar
+  req MKCOL   foo/bar   +auth
+  req MKCOL   foo       +auth   L=7 '' hello
+  req MKCOL   foo       +auth
+  req MKCOL   foo/bar   +auth
+  req MKCOL   foo/bar   +auth
+  req MKCOL   foo/bar/  +auth
+  req DELETE  foo       +auth
+  req DELETE  foo/      +auth
+  req DELETE  foo/bar   +auth
+  req DELETE  foo/bar/  +auth
+  req DELETE  foo/bar/  +auth
+  req DELETE  foo       +auth
+  req DELETE  foo/      +auth
+  req DELETE  foo/      +auth
+  req DELETE  foo       +auth
 }
 
 

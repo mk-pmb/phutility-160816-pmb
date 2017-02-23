@@ -18,10 +18,8 @@ function proxy () {
   local RMT_SOCK="TCP4"
   RMT_SOCK+=":$RMT_HOST:$RMT_PORT"
 
-  while true; do
-    socat -d -d -v "$LSN_SOCK" "$RMT_SOCK" \
-      2>&1 # | tee -a "${LOGFN%.diff}.raw"
-    sleep 0.5s
+  while sleep 0.2s; do
+    socat -d -d -v "$LSN_SOCK" "$RMT_SOCK" 2>&1 || return $?
   done | sed -urf unblink.sed | sed -urf 'socat-log-optim.sed' | tee "$LOGFN"
   return 0
 }

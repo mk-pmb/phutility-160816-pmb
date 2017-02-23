@@ -1,0 +1,181 @@
+﻿==---==---==---==
+MKCOL /__demo_baseurl__/subdir/KneeHighFence HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 201 Created
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="201 Created"}}
+
+==---==---==---==
+MKCOL /__demo_baseurl__/subdir/New%20Folder%20%282%29/ HTTP/1.1
+Authorization: Basic {{...}}
+
+{{connect}}
+HTTP/1.1 201 Created
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="201 Created"}}
+
+==---==---==---==
+PUT /__demo_baseurl__/subdir/HeavyBoulder HTTP/1.1
+Authorization: Basic {{...}}
+Content-Length: 9
+
+I rock.
+
+{{connect}}
+HTTP/1.1 201 Created
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="201 Created"}}
+
+==---==---==---==
+MOVE /__demo_baseurl__/subdir/New%20Folder%20%282%29/ HTTP/1.1
+Authorization: Basic {{...}}
+Destination: http://__server__/__demo_baseurl__/subdir/New%20Folder%20%282%29
+Overwrite: F
+X-Test-Expect: same
+
+{{connect}}
+HTTP/1.1 403 Forbidden
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="403 Forbidden"}} Source and target are the same.
+
+==---==---==---==
+MOVE /__demo_baseurl__/subdir/New%20Folder%20%282%29/ HTTP/1.1
+Authorization: Basic {{...}}
+Destination: http://__server__/__demo_baseurl__/subdir/New%20Folder%20%282%29
+X-Test-Expect: same
+
+{{connect}}
+HTTP/1.1 403 Forbidden
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="403 Forbidden"}} Source and target are the same.
+
+==---==---==---==
+MOVE /__demo_baseurl__/subdir/New%20Folder%20%282%29/ HTTP/1.1
+Authorization: Basic {{...}}
+Destination: http://__server__/__demo_baseurl__/subdir/KneeHighFence
+Overwrite: F
+X-Test-Expect: flinch
+
+{{connect}}
+HTTP/1.1 412 Precondition Failed
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="412 Precondition Failed"}} Destination exists.
+
+==---==---==---==
+MOVE /__demo_baseurl__/subdir/New%20Folder%20%282%29/ HTTP/1.1
+Authorization: Basic {{...}}
+Destination: http://__server__/__demo_baseurl__/subdir/KneeHighFence
+X-Test-Expect: insurmountable
+
+{{connect}}
+HTTP/1.1 403 Forbidden
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="403 Forbidden"}} Cannot overwrite a collection.
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/KneeHighFence/ HTTP/1.1
+Authorization: Basic {{...}}
+X-Test-Expect: was-dir
+
+{{connect}}
+HTTP/1.1 204 No Content
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="204 No Content"}} Empty directory was deleted.
+
+==---==---==---==
+MOVE /__demo_baseurl__/subdir/New%20Folder%20%282%29/ HTTP/1.1
+Authorization: Basic {{...}}
+Destination: http://__server__/__demo_baseurl__/subdir/HeavyBoulder
+Overwrite: F
+X-Test-Expect: flinch
+
+{{connect}}
+HTTP/1.1 412 Precondition Failed
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="412 Precondition Failed"}} Destination exists.
+
+==---==---==---==
+GET /__demo_baseurl__/subdir/HeavyBoulder HTTP/1.1
+Authorization: Basic {{...}}
+X-Test-Expect: file/heavy
+
+{{connect}}
+HTTP/1.1 200 OK
+Date: {{date/time}} GMT
+Last-Modified: {{date/time}} GMT
+ETag: {{...}}
+Accept-Ranges: bytes
+Content-Length: 9
+
+I rock.
+
+==---==---==---==
+MOVE /__demo_baseurl__/subdir/New%20Folder%20%282%29/ HTTP/1.1
+Authorization: Basic {{...}}
+Destination: http://__server__/__demo_baseurl__/subdir/HeavyBoulder
+X-Test-Expect: smash
+
+{{connect}}
+HTTP/1.1 204 No Content
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="204 No Content"}}
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/HeavyBoulder/ HTTP/1.1
+Authorization: Basic {{...}}
+X-Test-Expect: was-dir
+
+{{connect}}
+HTTP/1.1 204 No Content
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="204 No Content"}} Empty directory was deleted.
+
+==---==---==---==
+DELETE /__demo_baseurl__/subdir/New%20Folder%20%282%29/ HTTP/1.1
+Authorization: Basic {{...}}
+X-Test-Expect: was-moved
+
+{{connect}}
+HTTP/1.1 404 Not Found
+Date: {{date/time}} GMT
+Content-Length: {{100+}}
+Content-Type: text/html; charset={{...}}
+
+{{errdoc simple="404 Not Found"}} No need to delete it.
+
+==---==---==---==

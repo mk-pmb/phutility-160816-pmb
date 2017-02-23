@@ -17,9 +17,8 @@ phut\reg(__FILE__, function () {
       if ($existed && @is_dir($destfn)) {
         $fatal(405, 'Collection (directory) does not support PUT.');
       }
-      $hint = (string)@$why_not_writeable($destfn, $existed);
-      $hint = 'Cannot open target file' . ($hint ? ": $hint" : '') . '.';
-      $fatal(403, $hint);
+      phut\ld('web/windav/err_not_writable', NULL, [ $fatal,
+        'open target file', $destfn, $existed ]);
     }
 
     $fmode = @$cfg['chmod_file'];

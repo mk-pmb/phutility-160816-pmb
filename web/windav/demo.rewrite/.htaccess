@@ -17,7 +17,13 @@ AuthUserFile /var/www/your-webspace/windav/.htpasswd
 </IfModule>
 
 # Limit which methods we accept at all.
-<LimitExcept HEAD GET OPTIONS PROPFIND PUT DELETE COPY MOVE>
+<LimitExcept HEAD GET OPTIONS PROPFIND PUT DELETE MKCOL MOVE COPY>
+  # ATTN: MKCOL is useless without MOVE for clients like Win7 Pro,
+  #       which, when ordered via GUI to create a directory, tries to
+  #       create a collection with a standard name ("New Folder",
+  #       "New Folder (2)", …) first, and offers renaming of that new
+  #       collection only later, when and if it was created successfully
+  #       using the standard name.
   Require all denied
 </LimitExcept>
 
@@ -41,11 +47,13 @@ php_flag engine off
   Header add DAV "<http://apache.org/dav/propset/fs/1>"
 </If>
 
-<If "%{REQUEST_METHOD} in { 'PROPFIND', 'PUT', 'MKCOL', 'DELETE' }">
+<If "%{REQUEST_METHOD} in { 'PROPFIND', 'PUT', 'DELETE', 'MKCOL', 'MOVE' }">
   RewriteEngine on
   RewriteRule ^ "/your-webspace/windav/rewrite-handler.php" [nosubreq,last]
+              #  ^-- URL. not file system path.
 </If>
 
 # Use shorter error messages for shorter logs when testing.
 ErrorDocument 401 "Login failed."
 ErrorDocument 404 "File not found."
+ErrorDocument 405 "Method not allowed."

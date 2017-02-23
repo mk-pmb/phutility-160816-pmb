@@ -7,12 +7,15 @@ export LANG{,UAGE}=en_US.UTF-8
 
 function req () {
   local SEP_LINE='==---==---==---=='
-  if [ "$#:$1" == '1:bom+line' ]; then
-    echo $'\xEF\xBB\xBF'"$SEP_LINE"
+  if [ "$#:$1" == '1:--' ]; then
+    echo "$SEP_LINE"
     return 0
   fi
 
   [ -n "$HTTP_VERB" ] || local HTTP_VERB="$1"; shift
+  case "$HTTP_VERB" in
+    '' | '#'* ) echo "$SEP_LINE"; return 0;;
+  esac
   [ -n "$HTTP_URL" ]  || local HTTP_URL="$1"; shift
 
   [ -n "$DAV_HOST" ]  || local DAV_HOST='localhost'
@@ -31,14 +34,21 @@ function req () {
   esac
 
   local ARG=
-  for ARG in "$@"; do case "$ARG" in
-    D=* ) RQLN+=( "Depth: ${ARG#*=}" );;
-    L=* ) RQLN+=( "Content-Length: ${ARG#*=}" );;
-    T=* ) RQLN+=( "Content-Type: ${ARG#*=}" );;
-    *': '* ) RQLN+=( "$ARG" );;
-    *:* ) RQLN+=( "${ARG/:/: }" );;
-    * ) RQLN+=( "$ARG" );;
-  esac; done
+  for ARG in "$@"; do
+    ARG="${ARG//<<DAV_HOST>>/$DAV_HOST}"
+    ARG="${ARG//<<BASEURL>>/$BASEURL}"
+    case "$ARG" in
+      +auth ) RQLN+=( "$AUTH" );;
+      -ovr ) RQLN+=( 'Overwrite: F' );;
+      D=* ) RQLN+=( "Depth: ${ARG#*=}" );;
+      L=* ) RQLN+=( "Content-Length: ${ARG#*=}" );;
+      T=* ) RQLN+=( "Content-Type: ${ARG#*=}" );;
+      X=* ) RQLN+=( "X-Test-Expect: ${ARG#*=}" );;
+      *': '* ) RQLN+=( "$ARG" );;
+      *:* ) RQLN+=( "${ARG/:/: }" );;
+      * ) RQLN+=( "$ARG" );;
+    esac
+  done
 
   RQLN=( "$HTTP_VERB $BASEURL$HTTP_URL HTTP/1.1" "${RQLN[@]}" '' )
   printf '%s\n' "${RQLN[@]}" | sed -rf "$OUTPUT_FILTER"
@@ -54,9 +64,15 @@ function req () {
 
 
 function req_test () {
+  if [ -z "$AUTH" ]; then
+    local AUTH="$(./guess_login.sed ../.htpasswd)"
+    [ -n "$AUTH" ] || return 3$(echo 'E: failed to guess login' >&2)
+    AUTH="Authorization: Basic $(echo -n "$AUTH" | base64)"
+  fi
+
   [ -n "$BASEURL" ] || local BASEURL="/your-webspace/windav/$DEMO_DIR/"
   local LOG_FN="${DAV_HOST:-lh}.$TESTNAME.log"
-  ( req bom+line; "$@" ) 2>&1 | req_logsave || return $?
+  ( echo -n $'\xEF\xBB\xBF'; req --; "$@" ) 2>&1 | req_logsave || return $?
   req_logdiff || return $?
   return 0
 }

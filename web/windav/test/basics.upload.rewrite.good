@@ -21,12 +21,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>201 Created</title>
-</head><body>
-  <h1>Created</h1>
-</body></html>
+{{errdoc simple="201 Created"}}
 
 ==---==---==---==
 GET /__demo_baseurl__/subdir/upload.txt HTTP/1.1
@@ -56,12 +51,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>204 No Content</title>
-</head><body>
-  <h1>No Content</h1>
-</body></html>
+{{errdoc simple="204 No Content"}}
 
 ==---==---==---==
 GET /__demo_baseurl__/subdir/upload.txt HTTP/1.1
@@ -100,13 +90,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>204 No Content</title>
-</head><body>
-  <h1>No Content</h1>
-  <p>File was deleted.</p>
-</body></html>
+{{errdoc simple="204 No Content"}} File was deleted.
 
 ==---==---==---==
 HEAD /__demo_baseurl__/subdir/upload.txt HTTP/1.1

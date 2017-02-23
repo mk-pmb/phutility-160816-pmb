@@ -10,7 +10,7 @@ phut\reg(__FILE__, function () {
     http_response_code(500);  # <-- true if we fail to set another one later
     if (!is_array($cfg)) { $fatal(500, 'Config must be an array'); }
 
-    $rq = phut\ld('web/http/errdoc/parse_request', NULL, true);
+    $rq = phut\ld('web/http/parse_request', 'rq', true);
     if (is_string(@$rq['fspath'])) {
       if (substr($rq['fspath'], -1) === '/') {
         $rq['fspath'] = rtrim($rq['fspath'], '/');
@@ -31,6 +31,7 @@ phut\reg(__FILE__, function () {
     switch ($mtd) {
     case 'delete':
     case 'mkcol':
+    case 'move':
     case 'options':
     case 'propfind':
     case 'put':

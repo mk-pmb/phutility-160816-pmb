@@ -28,13 +28,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>409 Conflict</title>
-</head><body>
-  <h1>Conflict</h1>
-  <p>Parent collection does not exist.</p>
-</body></html>
+{{errdoc simple="409 Conflict"}} Parent collection does not exist.
 
 ==---==---==---==
 MKCOL /__demo_baseurl__/subdir/foo HTTP/1.1
@@ -49,13 +43,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>415 Unsupported Media Type</title>
-</head><body>
-  <h1>Unsupported Media Type</h1>
-  <p>Initial collection content is not supported yet.</p>
-</body></html>
+{{errdoc simple="415 Unsupported Media Type"}} Initial collection content is not supported yet.
 
 ==---==---==---==
 MKCOL /__demo_baseurl__/subdir/foo HTTP/1.1
@@ -67,12 +55,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>201 Created</title>
-</head><body>
-  <h1>Created</h1>
-</body></html>
+{{errdoc simple="201 Created"}}
 
 ==---==---==---==
 MKCOL /__demo_baseurl__/subdir/foo/bar HTTP/1.1
@@ -84,12 +67,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>201 Created</title>
-</head><body>
-  <h1>Created</h1>
-</body></html>
+{{errdoc simple="201 Created"}}
 
 ==---==---==---==
 MKCOL /__demo_baseurl__/subdir/foo/bar HTTP/1.1
@@ -122,13 +100,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>405 Method Not Allowed</title>
-</head><body>
-  <h1>Method Not Allowed</h1>
-  <p>Target already exists.</p>
-</body></html>
+{{errdoc simple="405 Method Not Allowed"}} Target already exists.
 
 ==---==---==---==
 DELETE /__demo_baseurl__/subdir/foo HTTP/1.1
@@ -161,13 +133,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>403 Forbidden</title>
-</head><body>
-  <h1>Forbidden</h1>
-  <p>Failed to delete, probably not empty.</p>
-</body></html>
+{{errdoc simple="403 Forbidden"}} Failed to delete, probably not empty.
 
 ==---==---==---==
 DELETE /__demo_baseurl__/subdir/foo/bar HTTP/1.1
@@ -200,13 +166,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>204 No Content</title>
-</head><body>
-  <h1>No Content</h1>
-  <p>Empty directory was deleted.</p>
-</body></html>
+{{errdoc simple="204 No Content"}} Empty directory was deleted.
 
 ==---==---==---==
 DELETE /__demo_baseurl__/subdir/foo/bar/ HTTP/1.1
@@ -218,13 +178,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>404 Not Found</title>
-</head><body>
-  <h1>Not Found</h1>
-  <p>No need to delete it.</p>
-</body></html>
+{{errdoc simple="404 Not Found"}} No need to delete it.
 
 ==---==---==---==
 DELETE /__demo_baseurl__/subdir/foo HTTP/1.1
@@ -257,13 +211,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>204 No Content</title>
-</head><body>
-  <h1>No Content</h1>
-  <p>Empty directory was deleted.</p>
-</body></html>
+{{errdoc simple="204 No Content"}} Empty directory was deleted.
 
 ==---==---==---==
 DELETE /__demo_baseurl__/subdir/foo/ HTTP/1.1
@@ -275,13 +223,7 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>404 Not Found</title>
-</head><body>
-  <h1>Not Found</h1>
-  <p>No need to delete it.</p>
-</body></html>
+{{errdoc simple="404 Not Found"}} No need to delete it.
 
 ==---==---==---==
 DELETE /__demo_baseurl__/subdir/foo HTTP/1.1
@@ -293,12 +235,6 @@ Date: {{date/time}} GMT
 Content-Length: {{100+}}
 Content-Type: text/html; charset={{...}}
 
-<!DOCTYPE html><html><head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>404 Not Found</title>
-</head><body>
-  <h1>Not Found</h1>
-  <p>No need to delete it.</p>
-</body></html>
+{{errdoc simple="404 Not Found"}} No need to delete it.
 
 ==---==---==---==
