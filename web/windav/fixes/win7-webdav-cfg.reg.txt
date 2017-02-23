@@ -1,0 +1,42 @@
+REGEDIT4
+
+; For detailed documentation, read:
+; http://web.archive.org/web/20170223202425/https://www.iis.net/learn/publish/using-webdav/using-the-webdav-redirector
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WebClient\Parameters]
+
+"BasicAuthLevel"=dword:00000002
+; ^-- For password-over-plain-HTTP WebDAV in a trusted LAN or via SSH tunnel.
+; default: "BasicAuthLevel"=dword:00000001
+; Paranoia levels:
+; 0 = Don't ever allow basic auth
+; 1 = Allow basic auth for SSL-encrypted connections (HTTPS)
+; 2 = Allow basic auth over any connection, even insecure
+
+"ClientDebug"=dword:00000001
+; default: "ClientDebug"=dword:00000000
+
+"ServiceDebug"=dword:00000001
+; default: "ServiceDebug"=dword:00000000
+
+"FileSizeLimitInBytes"=dword:7FFFFFFF
+; dword:80000000 = 2147483648 = 2 gibibyte
+; dword:7FFFFFFF = 2147483647 = 2 gibibyte - 1 byte
+; default: "FileSizeLimitInBytes"=dword:02faf080 = 50 MB
+
+"FileAttributesLimitInBytes"=dword:00800000
+; dword:00800000 = 8388608 = 8 mebibytes
+; default: "FileAttributesLimitInBytes"=dword:000f4240 = 1 MB
+
+"ServerNotFoundCacheLifeTimeInSec"=dword:00000000
+; default: "ServerNotFoundCacheLifeTimeInSec"=dword:0000003c = 60 sec
+; NB: This won't help against the list of servers that Windows has deemed to
+;     be non-WebDAV servers. To get a retry for that one, it seems you have
+;     to restart at least the WebClient service, maybe even Windows. :-(
+
+;;;; More tweaks:
+; default: "AcceptOfficeAndTahoeServers"=dword:00000001
+; default: "LocalServerTimeoutInSec"=dword:0000000f
+; default: "SendReceiveTimeoutInSec"=dword:0000003c
+; default: "ServiceDllUnloadOnStop"=dword:00000001
+; default: "SupportLocking"=dword:00000001
