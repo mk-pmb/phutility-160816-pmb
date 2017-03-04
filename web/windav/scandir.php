@@ -27,10 +27,12 @@ phut\reg(__FILE__, function () {
       $resp = $EX($fs_path . $fn, $depth, $url . rawurlencode($fn));
       # NB: Make sure to encode space as %20 (rawurlencode does this)
       #     as opposed to '+' (which urlencode would): Windows 7 Pro
-      #     understand a plus sign literally, display it as '+'
-      #     (not space) and send it verbatim in PROPFIND, which Apache
-      #     will then unescape to space, and the PROPFIND will fail or
-      #     check the wrong resource.
+      #     understands a plus sign literally, displays it as '+' (not
+      #     space) and sends it verbatim in PROPFIND. Depending on our
+      #     PHP script's parsing module, that '+' might become a space,
+      #     and the PROPFIND might fail or check the wrong resource.
+      #     Sending %20 makes scandir independent from whether '+' is
+      #     translated by a future parsing module.
       if ($resp !== false) { $found = array_merge($found, $resp); }
     }
 
