@@ -9,7 +9,9 @@ phut\reg(__FILE__, function () {
     http_response_code(500);
     if (!is_array($cmd)) { $cmd = [ (string)$cmd ]; }
     $cmd = implode(' ', array_map('escapeshellarg', $cmd));
-    foreach ($_SERVER as $key => $val) { putenv($key . '=' . $val); }
+    foreach ($_SERVER as $key => $val) {
+      if (is_string($val)) { putenv("$key=$val"); }
+    }
     putenv('GATEWAY_INTERFACE=CGI/1.1');
     $pipe = @popen($cmd . ' 2>&1', 'r');
     if ($pipe === false) {
